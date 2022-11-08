@@ -17,7 +17,8 @@ EntryWithEvents = myWidgetEntryWithEvents.EntryWithEvents
         
 entry_date = EntryWithEvents(root, max_len = 11, widget_name = 'entry_date', 
                              validation_method = val.validate_Date,
-                             set_justifiction = tk.LEFT)
+                             set_justifiction = tk.LEFT,
+                             tool_tip = 'Enter a date or a date shortcut!')
 entry_date.pack(expand=True)
 
 
@@ -41,7 +42,7 @@ entry_integer = EntryWithEvents(root, max_len = 15, widget_name = 'entry_integer
 entry_integer.pack(expand=True)
 
 
-entry_none = EntryWithEvents(root)
+entry_none = EntryWithEvents(root, tool_tip = 'Enter anything you like!')
 entry_none.pack(expand=True)
 
 # set focus to the field I want

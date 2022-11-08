@@ -1,10 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
+import clsBallonToolTip as btt
 
 # An implementation of ttk.Entry with Events, Validation and Formatting
 class EntryWithEvents(ttk.Entry):
     def __init__(self, master, max_len = None, widget_name = None, 
-                 validation_method = None, set_justifiction = None, **kw):
+                 validation_method = None, set_justifiction = None,
+                 tool_tip = None, **kw):
         super().__init__(master, **kw)
         
         self.master = master        
@@ -12,6 +14,7 @@ class EntryWithEvents(ttk.Entry):
         self.widget_name = widget_name
         self.validation_method = validation_method
         self.set_justifiction = set_justifiction
+        self.tool_tip = tool_tip
         
         text_checker = self.master.register(self.is_valid_input)
         self.configure(validate="all", 
@@ -24,6 +27,9 @@ class EntryWithEvents(ttk.Entry):
         
         # Initialise the field
         self.do_validation(None)
+        
+        if not self.tool_tip == None:
+            tmp_ttp = btt.CreateToolTip(self, self.tool_tip)
         
     def is_valid_input(self, d_action, i_index, P_text, 
                        s_prior_text, S_changed_text,  
@@ -56,6 +62,10 @@ class EntryWithEvents(ttk.Entry):
             # vaidate date using function passed in
             result = self.validation_method(data)
             
+            if self.tool_tip == None:
+                if not result[3] == None:
+                    self.tool_tip = result[3]
+
             if self.set_justifiction == None:
                 if not result[2] == None:
                     self.configure(justify = result[2])
