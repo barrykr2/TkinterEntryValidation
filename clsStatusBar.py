@@ -1,5 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
+from time import sleep
+from threading import Thread
+from datetime import datetime
+
 
 class status_bar_obj:
     def __init__(self, master, default_text = '', text = ''):
@@ -15,7 +19,8 @@ class status_bar_obj:
             
         self.statusVar.set(text)
         self.sbar.update()
-        
+         
+
 if __name__ == "__main__":
     root = tk.Tk()
 

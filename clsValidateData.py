@@ -1,11 +1,24 @@
 import tkinter as tk
 import clsDates as dateLib
 import clsStatusBar as status_bar
+import clsStrings as stringLib
 
+# initialise the date class outside the individual classes so it maintains status between calls 
 chkDate = dateLib.check_date(None, dateLib.nullDate)
 chkDate.allowShortCutKeys = True
+            
+class dataObj:
+    def __init__(self, isValid = False, value = None, widgetJustification = tk.LEFT, toolTip = None):
+        self.isValid = isValid
+        self.value = value
+        self.widgetJustification = widgetJustification
+        self.toolTip = toolTip
 
 class validate:
+    # This class is used by the GUI to do data type validation and formating.
+    # (business logic will need to be elsewhere)
+    # Return must always be of type "dataObj"
+    
     def __init__(self, statusBarObj = None, errorLogObj = None):
         self.statusBarObj = statusBarObj
         self.errorLogObj = errorLogObj
@@ -13,7 +26,7 @@ class validate:
     # ------ Start of Data Type Validations ------
     def validate_decimal(self, value = None, decimal_places = 2):
         formatting = "{: ." + str(decimal_places) + "f}"
-        tool_tip = 'Enter a number with ' + str(decimal_places) + ' places.'
+        tool_tip = 'Enter a number with ' + str(decimal_places) + ' decimal places.'
         returnObj = dataObj(False, formatting.format(0), tk.RIGHT, tool_tip)
         
         if value:
@@ -23,51 +36,81 @@ class validate:
                 pass
         
             self.update_status_bar(not returnObj.isValid, 'Error: "' + str(value) + '" not a number (type: decimal(' + str(decimal_places) + '))')
-        return (returnObj.isValid,returnObj.value,returnObj.widgetJustification,returnObj.toolTip)
+        return returnObj
     
     def validate_float(self, value = None):
-        returnValue = (False, 0, tk.RIGHT, None)
+        tool_tip = 'Enter any number (type: float).'
+        returnObj = dataObj(False, 0, tk.RIGHT, tool_tip)
         
         if value:
             try:
-                returnValue = (True, float(value), returnValue[2], None)
+                returnObj = dataObj(True, float(value), returnObj.widgetJustification, tool_tip)
             except Exception as e:
                 pass
         
-            self.update_status_bar(not returnValue[0], 'Error: "' + str(value) + '" not a number (type: float)')
-        return returnValue
+            self.update_status_bar(not returnObj.isValid, 'Error: "' + str(value) + '" not a number (type: float)')
+        return returnObj
     
     def validate_integer(self, value = None):
-        returnValue = (False, 0, tk.RIGHT, None)
+        tool_tip = 'Enter a whole number (type: integer).'
+        returnObj = dataObj(False, 0, tk.RIGHT, tool_tip)
         
         if value:
             try:
-                returnValue = (True, int(value), returnValue[2], None)
-                self.update_status_bar(not returnValue[0], 'Error: "' + str(value) + '" not a number (type: integer)')
+                returnObj = dataObj(True, int(value), returnObj.widgetJustification, tool_tip)
+                self.update_status_bar(not returnObj.isValid, 'Error: "' + str(value) + '" not a number (type: integer)')
             except Exception as e:
                 tmpVal = self.validate_float(value)
-                if tmpVal[0]:
-                    returnValue = (True, round(float(value)), returnValue[2], None)
-                    if float(value) > float(returnValue[1]):
+                if tmpVal.isValid:
+                    returnObj = dataObj(True, round(float(value)), returnObj.widgetJustification, tool_tip)
+                    if float(value) > float(returnObj.value):
                         self.update_status_bar(True, 'Info: "' + str(value) + '" rounded down (type: integer)')
                     else:
                         self.update_status_bar(True, 'Info: "' + str(value) + '" rounded up (type: integer)')
+
                 else:
-                    self.update_status_bar(not returnValue[0], 'Error: "' + str(value) + '" not a number (type: integer)')
-        return returnValue
+                    self.update_status_bar(not returnObj.isValid, 'Error: "' + str(value) + '" not a number (type: integer)')
+        return returnObj
     
     def validate_Date(self, value = None):
-        returnValue = (False, dateLib.nullDate, tk.CENTER, 'Date Stuff')
-        print(value)
+        returnObj = dataObj(False, dateLib.nullDate, tk.CENTER, dateLib.toolTip)
+
         if value:
             try:
                 chkDate.dateCheck(value)
                 self.update_status_bar(not chkDate.isValid, chkDate.messages)                
-                returnValue = (chkDate.isValid, chkDate.formattedDate, returnValue[2], 'Date Stuff')
+                returnObj = dataObj(chkDate.isValid, chkDate.formattedDate, returnObj.widgetJustification, dateLib.toolTip)
             except Exception as e:
                 pass
         
-        return returnValue
+        return returnObj
+    
+    def validate_title(self, value = None):
+        tool_tip = 'Enter text and it will be formated as a Title.'
+        returnObj = dataObj(False, value, tk.LEFT, tool_tip)
+        
+        if value:
+            try:
+                strFmt = stringLib.string_format()
+                returnObj = dataObj(True, strFmt.title(value), returnObj.widgetJustification, tool_tip)
+            except Exception as e:
+                pass
+        
+        return returnObj
+    
+    def validate_sentence(self, value = None):
+        tool_tip = 'Enter text and it will be formated as a Sentence.'
+        returnObj = dataObj(False, value, tk.LEFT, tool_tip)
+        
+        if value:
+            try:
+                strFmt = stringLib.string_format()
+                returnObj = dataObj(True, strFmt.sentence(value), returnObj.widgetJustification, tool_tip)
+            except Exception as e:
+                pass
+        
+        return returnObj
+    
     # ------ End of Data Type Validations ------
     
     def update_status_bar(self, display_message = False, message = None):
@@ -78,12 +121,5 @@ class validate:
                 self.statusBarObj.statusVar.set(self.statusBarObj.default_text)
         
             self.statusBarObj.sbar.update()
-            
-class dataObj:
-    def __init__(self, isValid = False, value = None, widgetJustification = tk.LEFT, toolTip = None):
-        self.isValid = isValid
-        self.value = value
-        self.widgetJustification = widgetJustification
-        self.toolTip = toolTip
     
-    
+ 

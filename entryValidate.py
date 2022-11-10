@@ -42,8 +42,14 @@ entry_integer = EntryWithEvents(root, max_len = 15, widget_name = 'entry_integer
 entry_integer.pack(expand=True)
 
 
-entry_none = EntryWithEvents(root, tool_tip = 'Enter anything you like!')
-entry_none.pack(expand=True)
+entry_title = EntryWithEvents(root, widget_name = 'entry_title', 
+                              validation_method = val.validate_title)
+entry_title.pack(expand=True)
+
+
+entry_sentence = EntryWithEvents(root, widget_name = 'entry_sentence', 
+                              validation_method = val.validate_sentence)
+entry_sentence.pack(expand=True)
 
 # set focus to the field I want
 root.after(1, lambda: entry_date.focus_set())
