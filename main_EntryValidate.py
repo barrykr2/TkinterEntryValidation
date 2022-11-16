@@ -1,3 +1,5 @@
+"""This Script is used for testing Tkinter Entry object extension custom widget."""
+
 import tkinter as tk
 from tkinter import ttk
 import clsStatusBar as status_bar
