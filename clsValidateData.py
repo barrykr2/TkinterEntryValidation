@@ -126,5 +126,12 @@ class validate:
     
  
 if __name__ == "__main__":
-    returnObj = validate.validat_decimal(1234.564, 2)
-    print(str(returnObj.isValid) + ', ' +  returnObj.value)
+    val = validate()
+    returnObj = val.validate_float(12345.76543)
+    print(str(returnObj.isValid) + ', ' +  str(returnObj.value))
+    
+    returnObj = val.validate_decimal(12345.76543, 3)
+    print(str(returnObj.isValid) + ', ' +  str(returnObj.value))
+    
+    returnObj = val.validate_decimal(12345.76543)
+    print(str(returnObj.isValid) + ', ' +  str(returnObj.value))
