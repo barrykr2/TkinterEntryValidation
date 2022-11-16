@@ -13,7 +13,7 @@ root.geometry("400x400")
 sbar = status_bar.status_bar_obj(root,default_text= "Ready",text="Loading...")
 val = validate.validate(statusBarObj= sbar)
 
-# Initial an implementation of ttk.Entry with Events, Validation and Formatting
+""" Initial an implementation of ttk.Entry with Events, Validation and Formatting """
 EntryWithEvents = myWidgetEntryWithEvents.EntryWithEvents
 
         
