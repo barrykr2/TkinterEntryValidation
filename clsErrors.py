@@ -12,7 +12,7 @@ class logger:
         # Create or get the logger
         self.logger = logging.getLogger(__name__)  
 
-        handler = logging.FileHandler(logger_file_name = logger_file_name)
+        handler = logging.FileHandler(filename = logger_file_name)
         # create a logging format
         formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
         handler.setFormatter(fmt = formatter)
