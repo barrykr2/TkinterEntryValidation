@@ -53,7 +53,7 @@ entry_sentence = EntryWithEvents(master=root, widget_name = 'entry_sentence',
                               validation_method = val.validate_sentence)
 entry_sentence.pack(expand=True)
 
-""" set focus to the field I want """
+# set focus to the field I want 
 root.after(1, lambda: entry_date.focus_set())
 
 sbar.update()
