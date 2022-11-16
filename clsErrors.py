@@ -12,17 +12,17 @@ class logger:
         # Create or get the logger
         self.logger = logging.getLogger(__name__)  
 
-        handler = logging.FileHandler(logger_file_name)
+        handler = logging.FileHandler(logger_file_name = logger_file_name)
         # create a logging format
         formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        self.logger.addHandler(handler)
+        handler.setFormatter(fmt = formatter)
+        self.logger.addHandler(hdlr = handler)
 
         # set log level
-        self.logger.setLevel(logging.ERROR)
+        self.logger.setLevel(level = logging.ERROR)
 
     def log(self, errException, sys_exc_info):
-        self.logger.exception(errException)
+        self.logger.exception(msg = errException)
 
         exc_type, exc_value, exc_traceback = sys_exc_info
         # eventually log to file and/or email
@@ -32,12 +32,12 @@ class logger:
 
 
 if __name__ == "__main__":
-    errorLog = logger('mylog.log', True)
+    errorLog = logger(logger_file_name='mylog.log', display_err_stout=True)
     
     # ==== Test above class ====
     try:
         y = 2
         x = y / 0
     except Exception as e:
-        errorLog.log(e, sys.exc_info())
+        errorLog.log(errException=e,sys_exc_info=sys.exc_info())
     
