@@ -56,4 +56,5 @@ root.after(1, lambda: entry_date.focus_set())
 
 sbar.update()
 
+root.title("Testing") # My Widget - Entry With Events")
 root.mainloop()

@@ -33,13 +33,13 @@ class EF(Enum):
     Day_Month_Year = 0
     Month_Day_Year = 1
     
-nullDate = '1900-01-01'
-defaultFullDate = "%Y-%m-%d"
-defaultFormattedDate = ["%d-%b-%Y", "%b-%d-%Y"]
-defaultLogFile = 'myLog.log'
-defaultToStdOut = False
+nullDate: str = '1900-01-01'
+defaultFullDate: str = "%Y-%m-%d"
+defaultFormattedDate: str = ["%d-%b-%Y", "%b-%d-%Y"]
+defaultLogFile: str = 'myLog.log'
+defaultToStdOut: bool = False
 
-toolTip = 'Enter a date or a shortcut key. \n'
+toolTip: str = 'Enter a date or a shortcut key. \n'
 toolTip += '(assuming d/m/y format.)\n'
 toolTip += '  "t" set today. \n'
 toolTip += '  "." use last date processed. \n'
@@ -51,7 +51,7 @@ toolTip += '  "ddmm" will substitute the day and month \n'
 toolTip += '         of the last date processed. \n'
 toolTip += '  "d/m" will substitute the day and month \n'
 toolTip += '        of the last date processed. \n'
-toolTip += '  "ddmmyy" will substitute the expand to a date.'
+toolTip += '  "ddmmyy" will be expanded to a date.'
 
 class check_date:
     # The class is initialised with:
@@ -62,10 +62,10 @@ class check_date:
     #  - the expectedInputFormat defines whether we are using US date format or not (default is NOT)
     #  - if allowShortCutKeys, this defaults to False as for processing the short cut keys should only be
     #    needed when called from a GUI. 
-    def __init__(self, errorLogObj = None,
-                 date = nullDate, formatting = "",
-                 expectedInputFormat = EF.Day_Month_Year,
-                 allowShortCutKeys = False):
+    def __init__(self, errorLogObj: errorLogger = None,
+                 date: str = nullDate, formatting :str = "",
+                 expectedInputFormat: EF = EF.Day_Month_Year,
+                 allowShortCutKeys: bool = False):
         # initialise all variables
         self.isValid = False
         self.expectedInputFormat = expectedInputFormat
@@ -82,7 +82,7 @@ class check_date:
         # validate date
         self.dateCheck(date, formatting)
         
-    def __setSelf(self, formatting = ""):
+    def __setSelf(self, formatting: str = ""):
         formatting = self.__setDefaultFormattedDate(formatting)
 
         self.day = self.dateObj.day
@@ -92,17 +92,17 @@ class check_date:
         self.formattedDate = self.dateObj.strftime(formatting)
         self.priorObj = self.dateObj
 
-    def __setDefaultFormattedDate(self, formatting = ""):
+    def __setDefaultFormattedDate(self, formatting: str = ""):
         if formatting == '':
             formatting = defaultFormattedDate[self.expectedInputFormat.value]
         return formatting
 
-    def __replaceSeperators(self, date):
+    def __replaceSeperators(self, date: str):
         # replace all date seperators with "-" for uniformity
         space_punct_dict = dict((ord(punct), '-') for punct in string.punctuation)
         return date.translate(space_punct_dict)
         
-    def __processShortCutKeys(self, date):
+    def __processShortCutKeys(self, date: str):
         # check if the date is using the prior date object to calc a new date
         if date == 't':                             # use today's date
             date = datetime.today().strftime(self.__setDefaultFormattedDate(''))
@@ -138,17 +138,17 @@ class check_date:
     # Function dateCheck is the main function that does checking and processing
     #  - a date (or possible date) is passed in be validated or processed as a short cut key
     #  - formatting is passed in if you want a different date output
-    def dateCheck(self, date, formatting = ""):
+    def dateCheck(self, date: str, formatting: str = ""):
         # Initialise date object
         self.dateObj = datetime.strptime(nullDate, defaultFullDate)
 
         try:
             if date:
                 if self.allowShortCutKeys:
-                    tmpDate = self.__processShortCutKeys(date)
+                    tmpDate = self.__processShortCutKeys(date = date)
                 else:
                     # replace all date seperators with "-" for uniformity
-                    tmpDate = self.__replaceSeperators(date)
+                    tmpDate = self.__replaceSeperators(date = date)
 
                 self.messages = None
                 dayFirst = False        # US format mm-dd-yyyy
@@ -178,12 +178,12 @@ class check_date:
 
         return self.formattedDate
         
-    def formatDate(self, date = nullDate, formatting = ""):
+    def formatDate(self, date: str = nullDate, formatting: str = ""):
         try:
             if date == nullDate:
                 date = self.formattedDate    # date hasn't changed so use current Object (faster when reusing date object)
             else:            
-                self.dateCheck(date, formatting)    # check date passed in
+                self.dateCheck(date = date, formatting = formatting)    # check date passed in
         except Exception as e:
             self.isValid = False
             self.errorLog.log(e, sys.exc_info())                
@@ -203,7 +203,7 @@ class check_date:
 
         return self.formattedDate
 
-    def subtractDay(self, numberOfDays = 1, formatting = "", date = nullDate):
+    def subtractDay(self, numberOfDays: int = 1, formatting: str = "", date: str = nullDate):
         returnDate = self.formattedDate
         
         try:
@@ -215,7 +215,7 @@ class check_date:
         return returnDate
 
 if __name__ == "__main__":
-    def testCheck(testId, expectedResult, restultReturned, now, displayErrorsOnly = True):
+    def testCheck(testId, expectedResult: str, restultReturned: str, now: datetime, displayErrorsOnly: bool = True):
         isError = ''
         if expectedResult != restultReturned:
             isError = 'Error: '

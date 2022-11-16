@@ -24,7 +24,7 @@ class string_format:
         for x in range(len(text)):
             if x == 0:
                 returnText = str(text[x]).upper()
-            elif x > 2 and str(text[x - 2:x]) == '. ':
+            elif x > 3 and (str(text[x - 2:x]) == '. ' or str(text[x - 3:x]) == '.  '):
                 returnText += str(text[x]).upper()
             else:
                 returnText += str(text[x])
@@ -55,3 +55,5 @@ if __name__ == "__main__":
     print(myFormat.sentence("they're over at bill's house. and, BTW, we are not going. okay?"))    
     print(myFormat.camelCase("they're over at bill's house. and, BTW, we are not going. okay?"))    
     print(myFormat.snake("they're over at bill's house. and, BTW, we are not going. okay?"))    
+    print(myFormat.sentence("This group is dedicated to Python Developers & Programmers which discusses all aspects of the server.  python is great."))
+    

@@ -40,7 +40,6 @@ class EntryWithEvents(ttk.Entry):
         # bind Ctrl-a to function as in popup menu (Ctrl-a is not normally handled)
         self.bind("<Control-a>", rcm.select_all)
         
-        #self.bind('<Control-a>', self.select_all)
         self.bind('<FocusOut>', self.do_validation)
         self.bind('<Return>', self.do_validation)
         
@@ -53,7 +52,7 @@ class EntryWithEvents(ttk.Entry):
     def is_valid_input(self, d_action, i_index, P_text, 
                        s_prior_text, S_changed_text,  
                        V_callback, W_widget_name):
-                       
+        
         if False:  # change to True to print parameters  (remove for runtime)
             print(str(datetime.today()) + ', ' + self.widget_name + ", " + d_action + ', ' + i_index + ', ' + 
                   P_text + ', ' + 
@@ -62,7 +61,7 @@ class EntryWithEvents(ttk.Entry):
         
         if V_callback == 'focusin':
             # select text after 100ms
-            self.master.after(100, self.__select_all)
+            self.master.after(50, self.__select_all)
             
         if V_callback == 'focusout':
             # deselect text
@@ -98,9 +97,6 @@ class EntryWithEvents(ttk.Entry):
                         self.insert(0, str(returnObj.value))
             elif len(data) > 0:
                 self.master.after(1, lambda: self.focus_set())
-
-    def select_all(self, key_press_event):
-        self.master.after(1, self.__select_all)
         
     def __select_all(self):
         # select text
