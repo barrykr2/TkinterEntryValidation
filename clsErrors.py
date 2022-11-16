@@ -1,4 +1,5 @@
 # clsErrors.py - class to log errors
+# This is a WIP
 
 import sys
 import traceback as trace_Back 
