@@ -9,7 +9,7 @@ from dataclasses import dataclass
 chkDate = dateLib.check_date(None, dateLib.nullDate)
 chkDate.allowShortCutKeys = True
             
-@dataclass
+@dataclass(slots=True)
 class dataObj:
     isValid: bool = False
     value: str = None
